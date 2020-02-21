@@ -1,6 +1,6 @@
 const express = require('express');
 const apiRouter = express.Router();
-const { checkIsValidModel, checkIsValidId, create, update, remove } = require('./utils');
+const { checkIsValidModel, create, removeAll, checkIsValidId, update, remove } = require('./utils');
 
 apiRouter.param('dbModel', checkIsValidModel);
 
@@ -9,6 +9,9 @@ apiRouter.get('/:dbModel', (req, res, next) => {
 });
 apiRouter.post('/:dbModel', create, (req, res, next) => {
     res.status(201).send(req.modelInstance);
+});
+apiRouter.delete('/:dbModel', removeAll, (req, res, next) => {
+    res.status(204).send(req.emptyArr);
 });
 
 apiRouter.param('modelId', checkIsValidId);

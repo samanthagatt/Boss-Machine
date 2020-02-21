@@ -1,4 +1,5 @@
-const { getAllFromDatabase, 
+const { getAllFromDatabase,
+    deleteAllFromDatabase,
     addToDatabase, 
     getFromDatabaseById,
     updateInstanceInDatabase,
@@ -18,6 +19,31 @@ const checkIsValidModel = (req, res, next, model) => {
     }
 }
 
+const removeAll = (req, res, next) => {
+    const emptyArr = deleteAllFromDatabase(req.modelType);
+    if (emptyArr) {
+        req.emptyArr = emptyArr;
+        next();
+    } else {
+        // Should never get here because of checkIsValidModel middleware
+        const err = new Error(`${req.modelType} is not a valid database model`);
+        err.status = 404;
+        next(err);
+    }
+}
+
+const create = (req, res, next) => {
+    const instance = addToDatabase(req.modelType, req.body);
+    if (instance) {
+        req.modelInstance = instance;
+        next();
+    } else {
+        const err = new Error(`The JSON sent in your request is not a valid ${req.modelType} instance`);
+        err.status = 400;
+        next(err);
+    }
+}
+
 const checkIsValidId = (req, res, next, id) => {
     const modelInstance = getFromDatabaseById(req.modelType, id);
     if (modelInstance) {
@@ -32,18 +58,6 @@ const checkIsValidId = (req, res, next, id) => {
         next(err);
     }
 };
-
-const create = (req, res, next) => {
-    const instance = addToDatabase(req.modelType, req.body);
-    if (instance) {
-        req.modelInstance = instance;
-        next();
-    } else {
-        const err = new Error(`The JSON sent in your request is not a valid ${req.modelType} instance`);
-        err.status = 400;
-        next(err);
-    }
-}
 
 const update = (req, res, next) => {
     const instance = req.body;
@@ -71,8 +85,9 @@ const remove = (req, res, next) => {
 
 module.exports = {
     checkIsValidModel,
-    checkIsValidId,
     create,
+    removeAll,
+    checkIsValidId,
     update,
     remove
 }
