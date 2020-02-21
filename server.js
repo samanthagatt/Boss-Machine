@@ -20,8 +20,8 @@ app.use(bodyParser.json());
 const apiRouter = require('./server/api');
 app.use('/api', apiRouter);
 
-const errorhandler = require('errorhandler')
-app.use(errorhandler());
+// Simple error handling
+app.use((err, req, res, next) => { res.status(err.status || 500).send(err.message) });
 
 // This conditional is here for testing purposes:
 if (!module.parent) { 

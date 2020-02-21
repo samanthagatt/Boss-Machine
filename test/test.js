@@ -613,9 +613,16 @@ describe('/api/meetings routes', function() {
   describe('POST /api/meetings', function() {
   
     it('should create a new meetings and return it', function() {
+      const newMeetingObject = {
+        time: "16:36",
+        date: "2020-07-20T20:36:47.641Z",
+        day: "Mon Jul 20 2024",
+        note: "Brainstorm Expanded multi-state utilisation"
+      }
       return request(app)
         .post('/api/meetings')
         .expect(201)
+        .send(newMeetingObject)
         .then((response) => response.body)
         .then((createdMeeting) => {
           expect(createdMeeting).to.have.ownProperty('time');
@@ -628,6 +635,12 @@ describe('/api/meetings routes', function() {
     it('should persist the created meeting to the database', function() {
       let initialMeetingsArray;
       let newlyCreatedMeeting;
+      const newMeetingObject = {
+        time: "16:36",
+        date: "2020-07-20T20:36:47.641Z",
+        day: "Mon Jul 20 2024",
+        note: "Brainstorm Expanded multi-state utilisation"
+      }
       return request(app)
         .get('/api/meetings')
         .then((response) => {
@@ -636,6 +649,7 @@ describe('/api/meetings routes', function() {
         .then(() => {
           return request(app)
             .post('/api/meetings')
+            .send(newMeetingObject)
             .expect(201);
         })
         .then((response) => response.body)
