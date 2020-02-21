@@ -20,6 +20,9 @@ app.use(bodyParser.json());
 const apiRouter = require('./server/api');
 app.use('/api', apiRouter);
 
+const errorhandler = require('errorhandler')
+app.use(errorhandler());
+
 // This conditional is here for testing purposes:
 if (!module.parent) { 
     // Add your code to start the server listening at PORT below:
