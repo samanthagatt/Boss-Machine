@@ -492,6 +492,7 @@ describe('checkMillionDollarIdea middleware', function() {
     status = null;
     sent = null;
     req = {
+      modelType: 'ideas',
       body: {},
     }
     response = {

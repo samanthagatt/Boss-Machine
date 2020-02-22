@@ -1,13 +1,14 @@
 const express = require('express');
 const apiRouter = express.Router();
 const { checkIsValidModel, create, removeAll, checkIsValidId, update, remove } = require('./utils');
+const checkMillionDollarIdea = require('./checkMillionDollarIdea');
 
 apiRouter.param('dbModel', checkIsValidModel);
 
 apiRouter.get('/:dbModel', (req, res, next) => {
     res.send(req.modelItems);
 });
-apiRouter.post('/:dbModel', create, (req, res, next) => {
+apiRouter.post('/:dbModel', checkMillionDollarIdea, create, (req, res, next) => {
     res.status(201).send(req.modelInstance);
 });
 apiRouter.delete('/:dbModel', removeAll, (req, res, next) => {
